@@ -6,12 +6,13 @@
 /*   By: souaguen <souaguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 09:16:43 by  souaguen         #+#    #+#             */
-/*   Updated: 2024/09/15 10:42:30 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:15:56 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <math.h>
+#include <mlx.h>
 
 typedef struct s_vec3
 {
@@ -45,34 +46,23 @@ t_sphere	ft_sphere(t_vec3 origin, double radius)
 	return (s);
 }
 
-double	ft_pow(double x)
-{
-	double	n;
-
-	n = x * x;
-	if ((n / x) != x)
-		return (-1);
-	return (n);
-}
-
 int	ft_has_intersection(t_sphere s, t_vec3 e, t_vec3 d)
 {
 	double	a;
 	double	b;
 	double	c;
-
+	
 	e.x -= s.o.x;
 	e.y -= s.o.y;
 	e.z -= s.o.z;
-
 	d.x -= s.o.x;
 	d.y -= s.o.y;
 	d.z -= s.o.z;
-	
+	//printf("%f, %f\n", d.x, d.y);
 	a = pow(d.x, 2) + pow(d.y, 2) + pow(d.z, 2);
-	b = (2 * (e.x * d.x)) + (2 * (e.y + d.y)) + (2 * (e.z + d.z));
+	b = 2 * ((e.x * d.x) + (e.y * d.y) + (e.z * d.z));
 	c = pow(d.x, 2) + pow(d.y, 2) + pow(d.z, 2) - pow(s.r, 2);
-
+	
 	// Hitting sphere Equation:
 	//
 	// (d.x^2 + d.y^2 + d.z^2) * t^2 + (2 * (e.x * d.x) + 2 * (e.y * d.y) + 2 * (e.z * d.z)) * t + (d.x^2 + d.y^2 + d.z^2 - s.r^2) = 0
@@ -84,34 +74,74 @@ int	ft_has_intersection(t_sphere s, t_vec3 e, t_vec3 d)
 	return ((pow(b, 2) - (4 * (a * c))) > 0);
 }
 
+int     get_rgb(unsigned char red, unsigned char green, unsigned char blue)
+{
+        int     c;
+
+        c = 0;
+        c += red;
+        c = c << 8;
+        c += green;
+        c = c << 8;
+        c += blue;
+        return (c);
+}
+
+void    img_pixel_put(char **img, int size_line, int x, int y)
+{
+        char    *data_addr;
+        int             i;
+	int		color;
+	
+        color = get_rgb(255, 255, 255);
+        data_addr = *img;
+        i = (y * size_line) + (x * 4);
+        *(unsigned int *)(data_addr + i) = color;
+}
+
 int		main(int argc, char **argv)
 {
 	t_sphere	sphere;
 	t_vec3		e;
 	t_vec3		d;
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+	char	*img;
+	int	bpp;
+	int	size_line;
+	int	endian;
+	double	i;
+	double	j;
+	
 	(void)argc;
 	(void)argv;
 
-	sphere = ft_sphere(ft_vec3(1, 1, -5), 4.5);
+	mlx_ptr = mlx_init();
+	win_ptr = mlx_new_window(mlx_ptr, 600, 600, "MiniRT");
+	img_ptr = mlx_new_image(mlx_ptr, 600, 600);
+	img = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
+	sphere = ft_sphere(ft_vec3(0, 0, -1), 0.5);
 	e = ft_vec3(0, 0, 0);
-	int	i;
-	int	j;
-
-	i = -10;
-	while (i < 10)
+	i = 0;
+	while (i <= 600)
 	{
-		j = -10;
-		while (j < 10)
+		j = 0;
+		while (j <= 600)
 		{
-			d = ft_vec3(i - 0.5, j - 0.5, -1);
+			d = ft_vec3(((double)j / 600) * 2.0 - 1.0, ((double)i / 600) * 2.0 - 1.0, -1.0);
 			if (ft_has_intersection(sphere, e, d))
-				printf("0");
-			else
-				printf("1");
-			j++;
+				img_pixel_put(&img, size_line, j, i);
+			j += 1.0;
 		}
-		printf("\n");
-		i++;
+		i += 1.0;
 	}
+	//printf("%d %d %d\n", bpp, size_line, endian);
+	//ft_draw_sphere();
+	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
+	mlx_loop(mlx_ptr);
+	(void)mlx_ptr;
+	(void)win_ptr;
+	(void)img;
 	return (0);
 }
