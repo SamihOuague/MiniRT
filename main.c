@@ -6,7 +6,7 @@
 /*   By: souaguen <souaguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 09:16:43 by  souaguen         #+#    #+#             */
-/*   Updated: 2024/09/16 20:15:56 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:56:05 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,17 @@ int	ft_has_intersection(t_sphere s, t_vec3 e, t_vec3 d)
 	double	b;
 	double	c;
 	
+	e.y = -e.y;
 	e.x -= s.o.x;
 	e.y -= s.o.y;
 	e.z -= s.o.z;
-	d.x -= s.o.x;
-	d.y -= s.o.y;
-	d.z -= s.o.z;
+	//d.x += e.x;
+	//d.y += e.y;
+	//d.z -= s.o.z;
 	//printf("%f, %f\n", d.x, d.y);
 	a = pow(d.x, 2) + pow(d.y, 2) + pow(d.z, 2);
 	b = 2 * ((e.x * d.x) + (e.y * d.y) + (e.z * d.z));
-	c = pow(d.x, 2) + pow(d.y, 2) + pow(d.z, 2) - pow(s.r, 2);
+	c = pow(e.x, 2) + pow(e.y, 2) + pow(e.z, 2) - pow(s.r, 2);
 	
 	// Hitting sphere Equation:
 	//
@@ -121,15 +122,15 @@ int		main(int argc, char **argv)
 	win_ptr = mlx_new_window(mlx_ptr, 600, 600, "MiniRT");
 	img_ptr = mlx_new_image(mlx_ptr, 600, 600);
 	img = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
-	sphere = ft_sphere(ft_vec3(0, 0, -1), 0.5);
-	e = ft_vec3(0, 0, 0);
+	sphere = ft_sphere(ft_vec3(0.75, -0.75, 0), 0.5);
+	e = ft_vec3(0, 0, 2);
 	i = 0;
 	while (i <= 600)
 	{
 		j = 0;
 		while (j <= 600)
 		{
-			d = ft_vec3(((double)j / 600) * 2.0 - 1.0, ((double)i / 600) * 2.0 - 1.0, -1.0);
+			d = ft_vec3(((double)j / 600) * 2.0 - 1.0, ((double)i / 600) * 2.0 - 1.0, -1);
 			if (ft_has_intersection(sphere, e, d))
 				img_pixel_put(&img, size_line, j, i);
 			j += 1.0;
