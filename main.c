@@ -6,7 +6,7 @@
 /*   By: souaguen <souaguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 09:16:43 by  souaguen         #+#    #+#             */
-/*   Updated: 2024/09/19 07:24:05 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/09/19 09:19:40 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	ft_get_pixel(t_sphere s, t_vec3 e, t_vec3 d)
 	t_vec3	ray;
 	t_vec3	light;
 	
-	light = ft_vec3(0, -10, -4);//I
+	light = ft_vec3(-15, -15, -1);//I
 
 	// Hitting sphere Equation:
 	//
@@ -128,9 +128,10 @@ int	ft_get_pixel(t_sphere s, t_vec3 e, t_vec3 d)
 	// b = (2 * (e.x * d.x) + 2 * (e.y * d.y) + 2 * (e.z * d.z))
 	// c = (d.x^2 + d.y^2 + d.z^2 - s.r^2)
 	//
-	// (b^2 - 4ac) > 0
-	e.y = e.y;
+	// (b^2 - 4ac) > 0	
+	t_vec3 E = e;
 	e = ft_sub(e, s.o);
+	light = ft_sub(light, s.o);
 	a = ft_dot(d, d);
 	b = 2 * ft_dot(e, d);
 	c = ft_dot(e, e) - pow(s.r, 2);
@@ -144,20 +145,30 @@ int	ft_get_pixel(t_sphere s, t_vec3 e, t_vec3 d)
 		ray = ft_vec3(e.x + (d.x * t.x), e.y + (d.y * t.x), e.z + (d.z * t.x));
 	else
 		ray = ft_vec3(e.x + (d.x * t.y), e.y + (d.y * t.y), e.z + (d.z * t.y));
-	double	length = sqrt(ft_dot(ray, ray));
-	ray.x = ray.x / length;
-	ray.y = ray.y / length;
-	ray.z = ray.z / length; // N
-	double intensity = ft_dot(ray, light) * 0.5; 
-	//	double	intensity = (sqrt(pow(ray.x, 2)) + sqrt(pow(ray.y, 2) + sqrt(pow(ray.z, 2)))) / 3;
-	if (intensity < 0)
-	{
-		return (get_rgb(0, 0, 0));
-	}
-
-	//printf("%f\n", intensity);
+	ray = ft_normalize(ray);
+	light = ft_normalize(light);	
+	e = E;
+	e = ft_normalize(e);
+	double diffuse = ft_dot(ray, light); 
+	if (diffuse < 0)
+		diffuse = 0;
+	//	double	intensity = (sqrt(pow(ray.x, 2)) + sqrt(pow(ray.y, 2) + sqrt(pow(ray.z, 2)))) / 3;	
+	//e = ft_sum(e, s.o);
+	double	specular = 2 * ft_dot(ray, light);
+	t_vec3	I = light;
+	t_vec3	N = ft_vec3(ray.x * specular, ray.y * specular, ray.z * specular);
+	t_vec3	R = ft_sub(I, N);
+	if (specular > 0)
+		specular = pow(ft_dot(R, e), 10);
+	else
+		specular = 0;
+	double intensity = diffuse * 0.4 + specular * 0.5 + 0.1;
 	if (intensity > 1)
-		intensity = 1;
+		printf("%f\n", intensity);
+	if (intensity < 0)
+		return (0);
+	//printf("%f\n", specular);
+	//printf("%f\n", intensity);
 	return (get_rgb(255 * intensity, 255 * intensity, 255 * intensity));	
 }
 
