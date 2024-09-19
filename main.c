@@ -6,7 +6,7 @@
 /*   By: souaguen <souaguen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 09:16:43 by  souaguen         #+#    #+#             */
-/*   Updated: 2024/09/18 12:11:30 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/09/19 07:24:05 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,28 @@ t_vec3		ft_sub(t_vec3 a, t_vec3 b)
 	return (v);
 }
 
+
+
+t_vec3		ft_sum(t_vec3 a, t_vec3 b)
+{
+	t_vec3	v;
+
+	v.x = a.x + b.x;
+	v.y = a.y + b.y;
+	v.z = a.z + b.z;
+	return (v);
+}
+
+t_vec3		ft_prod(t_vec3 a, t_vec3 b)
+{
+	t_vec3	v;
+
+	v.x = a.x * b.x;
+	v.y = a.y * b.y;
+	v.z = a.z * b.z;
+	return (v);
+}
+
 int     get_rgb(unsigned char red, unsigned char green, unsigned char blue)
 {
         int     c;
@@ -97,7 +119,7 @@ int	ft_get_pixel(t_sphere s, t_vec3 e, t_vec3 d)
 	t_vec3	ray;
 	t_vec3	light;
 	
-	light = ft_vec3(-4, -4, -32);
+	light = ft_vec3(0, -10, -4);//I
 
 	// Hitting sphere Equation:
 	//
@@ -107,7 +129,7 @@ int	ft_get_pixel(t_sphere s, t_vec3 e, t_vec3 d)
 	// c = (d.x^2 + d.y^2 + d.z^2 - s.r^2)
 	//
 	// (b^2 - 4ac) > 0
-	e.y = -e.y;
+	e.y = e.y;
 	e = ft_sub(e, s.o);
 	a = ft_dot(d, d);
 	b = 2 * ft_dot(e, d);
@@ -122,22 +144,21 @@ int	ft_get_pixel(t_sphere s, t_vec3 e, t_vec3 d)
 		ray = ft_vec3(e.x + (d.x * t.x), e.y + (d.y * t.x), e.z + (d.z * t.x));
 	else
 		ray = ft_vec3(e.x + (d.x * t.y), e.y + (d.y * t.y), e.z + (d.z * t.y));
-	e = ray;
-	d = light;
-	e = ft_sub(e, s.o);
-	a = ft_dot(d, d);
-	b = 2 * ft_dot(e, d);
-	c = ft_dot(e, e) - pow(s.r, 2);
-	dis = (pow(b, 2) - (4 * (a * c)));
 	double	length = sqrt(ft_dot(ray, ray));
-	ray.x = (ray.x / length + 1) / 2;
-	ray.y = (ray.y / length + 1) / 2;
-	ray.z = (ray.z / length + 1) / 2;	
-	double	intensity = (ray.x + ray.y + ray.z) / 3;
-	if (dis >= 0)	
-		return (get_rgb(55 * intensity, 55 * intensity, 55 * intensity));
-		
-	return (get_rgb(255 * intensity, 255 * intensity, 255 * intensity));
+	ray.x = ray.x / length;
+	ray.y = ray.y / length;
+	ray.z = ray.z / length; // N
+	double intensity = ft_dot(ray, light) * 0.5; 
+	//	double	intensity = (sqrt(pow(ray.x, 2)) + sqrt(pow(ray.y, 2) + sqrt(pow(ray.z, 2)))) / 3;
+	if (intensity < 0)
+	{
+		return (get_rgb(0, 0, 0));
+	}
+
+	//printf("%f\n", intensity);
+	if (intensity > 1)
+		intensity = 1;
+	return (get_rgb(255 * intensity, 255 * intensity, 255 * intensity));	
 }
 
 void    img_pixel_put(char **img, int size_line, int x, int y, int color)
@@ -181,7 +202,7 @@ int		main(int argc, char **argv)
 	win_ptr = mlx_new_window(mlx_ptr, 600, 600, "MiniRT");
 	img_ptr = mlx_new_image(mlx_ptr, 600, 600);
 	img = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
-	sphere = ft_sphere(ft_vec3(0, 0, -20), 4);
+	sphere = ft_sphere(ft_vec3(0, 0, -10), 4);
 	e = ft_vec3(0, 0, 2);
 	int angle = 0;
 	t_sphere	back = sphere;
