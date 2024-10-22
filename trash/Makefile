@@ -5,35 +5,30 @@
 #                                                     +:+ +:+         +:+      #
 #    By: souaguen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/09/26 10:21:22 by souaguen          #+#    #+#              #
-#    Updated: 2024/10/19 01:10:34 by souaguen         ###   ########.fr        #
+#    Created: 2023/11/05 06:10:54 by  souaguen         #+#    #+#              #
+#    Updated: 2024/09/21 10:35:57 by souaguen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC=cc
-CFLAGS=-g -I./ -I./get_next_line -I./libft -I./minilibx-linux  
-SRC=ft_sphere_utils.c \
-    ft_cylinder_utils.c \
-    ft_plane_utils.c \
-    ft_shapes.c \
-    ft_utils.c \
-    get_next_line/get_next_line.c \
-    get_next_line/get_next_line_utils.c \
-    main.c
-OBJ=$(SRC:.c=.o)
+SRCS=src/utils.c \
+     main.c
 NAME=miniRT
+OBJ=$(SRCS:.c=.o)
+CFLAGS=-I./includes -g
+LIBFLAGS=-L./minilibx-linux -l:libmlx_Linux.a -lXext -lX11 -lm
 
 $(NAME): $(OBJ)
-	make -C minilibx-linux
-	$(CC) $(OBJ) $(CFLAGS) -o $(NAME) -L./libft -l:libft.a -L./minilibx-linux -l:libmlx.a -lmlx -lXext -lX11 -lm
+	make -C minilibx-linux all
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFLAGS) 
 
-clean:	
+all: $(NAME)
+
+clean:
 	make -C minilibx-linux clean
 	rm -f $(OBJ)
-
 fclean: clean
 	rm -f $(NAME)
+re: fclean all
 
-re: fclean $(NAME)
-
-.PHONY: all clean re
+.PHONY: all clean fclean re bonus
