@@ -6,7 +6,7 @@
 #    By: souaguen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/26 10:21:22 by souaguen          #+#    #+#              #
-#    Updated: 2024/10/19 01:10:34 by souaguen         ###   ########.fr        #
+#    Updated: 2024/10/22 12:19:59 by souaguen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,11 @@ NAME=miniRT
 
 $(NAME): $(OBJ)
 	make -C minilibx-linux
+	make -C libft all bonus
 	$(CC) $(OBJ) $(CFLAGS) -o $(NAME) -L./libft -l:libft.a -L./minilibx-linux -l:libmlx.a -lmlx -lXext -lX11 -lm
 
-clean:	
+clean:
+	make -C libft clean	
 	make -C minilibx-linux clean
 	rm -f $(OBJ)
 

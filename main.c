@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:25:10 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/22 07:44:27 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:04:54 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,31 @@ t_list	*ft_lst_shapes()
 	t_shape	*shape;	
 	double	size[2];
 	
-	size[0] = 5;
-	size[1] = 6;	
+	size[0] = 4;
+	size[1] = 2;
 	lst_shapes = NULL;
-	shape = ft_create_sphere(ft_vec3(-10, 0, 20), 5, 0xff00ff);
+	shape = ft_create_sphere(ft_vec3(-10, 0, 20), 3, 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_sphere(ft_vec3(0, 0, 20), 3, 0xff00ff);
+	shape = ft_create_sphere(ft_vec3(10, 0, 20), 3, 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_cylinder(ft_vec3(-10, 0, -10), ft_vec3(0, 1, 0), size, 0xff00ff);
+	shape = ft_create_cylinder(ft_vec3(0, 2, 15), ft_vec3(0, 1, 0), size, 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, -1, -1), 0xff00ff);
+	shape = ft_create_plane(ft_vec3(0, 1, 0), ft_vec3(0, -3, -1), 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, -1), 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_plane(ft_vec3(1, 0, 0), ft_vec3(-10, 0, -1), 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_plane(ft_vec3(-1, 0, 0), ft_vec3(10, 0, -1), 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_plane(ft_vec3(0, 0, -1), ft_vec3(0, 1, 30), 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
 	return (lst_shapes);
@@ -75,7 +87,7 @@ int	ft_light(t_ray *ray)
 {
 	t_hitpoint	hit;
 	t_vec3		v;
-	t_vec3		lm;	
+	t_vec3		lm;
 	t_vec3		n;
 	double		intensity;
 	int		pixel;
@@ -83,9 +95,8 @@ int	ft_light(t_ray *ray)
 	v = ft_product((*ray).direction, (*ray).hit.distance);
 	hit = (*ray).hit;
 
-	lm = ft_normalize(ft_sub(ft_product(ft_vec3(-20, 0, 0), -1), v));
-	n = ft_normalize(hit.normal);
-	
+	lm = ft_normalize(ft_sub(ft_vec3(0, 0, 9), v));
+	n = hit.normal;
 	intensity = ft_dot(lm, n);
 	if (intensity < 0)
 		intensity = 0;

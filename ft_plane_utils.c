@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 05:44:26 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/19 02:17:38 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/23 09:37:59 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,21 @@
 int	ft_plane_intersection(void *plane, t_ray *ray)
 {
 	t_plane	pl;
+	double	d;
+	double	num;
+	double	den;
 	
 	pl = *(t_plane *)plane;
-	// Plane intersection code here :
-	//
-	//
-	// printf("Plane intersection\n");
-	return (0);
+	den = ft_dot(pl.direction, (*ray).direction);
+	if (fabs(den) <= 0.01f)
+		return (0);
+	num = ft_dot(pl.direction, ft_sub(pl.point, (*ray).from));
+	d = num / den;
+	if (d < 0)
+		return (0);
+	(*ray).hit.distance = d;
+	(*ray).hit.normal = ft_normalize(pl.direction);
+	return (1);
 }
 
 t_plane	ft_plane(t_vec3 direction, t_vec3 point)

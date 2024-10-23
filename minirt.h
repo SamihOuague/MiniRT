@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:05:54 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/19 08:50:08 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/23 09:00:26 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_shape		*ft_create_cylinder(t_vec3 base, t_vec3 axis, double size[2], int color
 t_shape		*ft_create_plane(t_vec3 axis, t_vec3 point, int color);
 t_vec3		ft_sub(t_vec3 a, t_vec3 b);
 t_vec3		ft_product(t_vec3 a, double n);
+t_vec3		ft_normalize(t_vec3 v);
 void	ft_sphere_shape(t_shape **shape);
 void	ft_cylinder_shape(t_shape **shape);
 void	ft_plane_shape(t_shape **shape);
