@@ -6,12 +6,15 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:25:10 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/23 12:04:54 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/26 14:47:49 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "get_next_line.h"
+
+
+int	ft_has_intersection(t_list *shapes, t_ray *ray, void *exclude);
 
 int     ft_get_rgb(int r, int g, int b)
 {
@@ -43,19 +46,45 @@ t_list	*ft_lst_shapes()
 	size[0] = 4;
 	size[1] = 2;
 	lst_shapes = NULL;
-	shape = ft_create_sphere(ft_vec3(-10, 0, 20), 3, 0xff00ff);
+	
+	shape = ft_create_sphere(ft_vec3(-10, 0, 15), 3, 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_sphere(ft_vec3(10, 0, 20), 3, 0xff00ff);
+
+	shape = ft_create_sphere(ft_vec3(10, 0, 15), 3, 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_cylinder(ft_vec3(0, 2, 15), ft_vec3(0, 1, 0), size, 0xff00ff);
+
+	shape = ft_create_cylinder(ft_vec3(5, 3, 30), ft_vec3(0, -1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_cylinder(ft_vec3(-5, 3, 30), ft_vec3(0, -1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_cylinder(ft_vec3(5, 4, 20), ft_vec3(0, -1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_cylinder(ft_vec3(-5, 4, 20), ft_vec3(0, -1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	
+	shape = ft_create_cylinder(ft_vec3(5, 6, 10), ft_vec3(0, -1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	shape = ft_create_cylinder(ft_vec3(-5, 6, 10), ft_vec3(0, -1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	/*size[1] = 50;
+	shape = ft_create_cylinder(ft_vec3(0, 2, 10), ft_vec3(0, 1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);*/
+	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, 20), 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
 	shape = ft_create_plane(ft_vec3(0, 1, 0), ft_vec3(0, -3, -1), 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, -1), 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
 	shape = ft_create_plane(ft_vec3(1, 0, 0), ft_vec3(-10, 0, -1), 0xff00ff);
@@ -78,12 +107,31 @@ t_vec3	ft_product(t_vec3 a, double n)
 	return (a);
 }
 
+t_vec3	ft_sum(t_vec3 a, t_vec3 b);
+
 t_vec3	ft_normalize(t_vec3 v)
 {
 	return (ft_product(v, 1 / sqrt(ft_dot(v, v))));
 }
 
-int	ft_light(t_ray *ray)
+int	ft_is_shadow(t_ray ray, t_vec3 light, t_list *shapes)
+{
+	t_vec3	hit;
+	t_ray	shadow;
+	double	light_d;
+	
+	hit = ft_sum(ray.from, ft_product(ray.direction, ray.hit.distance));
+	shadow.direction = ft_normalize(ft_sub(light, hit));
+	shadow.from = hit;
+	light = ft_sub(light, hit);
+	light_d = sqrt(ft_dot(light, light));
+	if (ft_has_intersection(shapes, &shadow, ray.hit.shape_addr)
+			&& light_d > shadow.hit.distance)
+		return (1);
+	return (0);
+}
+
+int	ft_light(t_ray *ray, t_list *shapes)
 {
 	t_hitpoint	hit;
 	t_vec3		v;
@@ -91,42 +139,45 @@ int	ft_light(t_ray *ray)
 	t_vec3		n;
 	double		intensity;
 	int		pixel;
+	t_vec3		light;
 
-	v = ft_product((*ray).direction, (*ray).hit.distance);
+	light = ft_vec3(0, -2, 15);
+	v = ft_sum((*ray).from, ft_product((*ray).direction, (*ray).hit.distance));
 	hit = (*ray).hit;
-
-	lm = ft_normalize(ft_sub(ft_vec3(0, 0, 9), v));
+	lm = ft_normalize(ft_sub(ft_sub(light, (*ray).from), v));
 	n = hit.normal;
 	intensity = ft_dot(lm, n);
-	if (intensity < 0)
+	if (intensity < 0 || ft_is_shadow(*ray, light, shapes))
 		intensity = 0;
-	//intensity = (intensity * 0.90) + 0.1;
+	intensity = (intensity * 1) + 0;
 	pixel = ft_get_rgb(255 * intensity, 255 * intensity, 255 * intensity);
 	return (pixel);
 }
 
-int	ft_has_intersection(t_list *shapes, t_ray *ray)
+int	ft_has_intersection(t_list *shapes, t_ray *ray, void *exclude)
 {
 	t_list	*cursor;
 	t_list	*tmp;
 	t_shape	*content;
 	t_hitpoint	hit;
 
-	hit.distance = -1;
+	hit.distance = 10000;
 	cursor = shapes;
 	while (cursor != NULL)
 	{
 		content = (*cursor).content;
-		if ((*content).hasInter((*content).object, ray))
+		if ((*content).object != exclude 
+			&& (*content).hasInter((*content).object, ray)
+			&& (*ray).hit.distance > 0)
 		{
-			if (hit.distance < 0 || (*ray).hit.distance < hit.distance)
+			if ( (*ray).hit.distance < hit.distance)
 				hit = (*ray).hit;
 		}
 		cursor = (*cursor).next;
 	}
 	(*ray).hit = hit;
-	if (hit.distance > 0)
-		return (ft_light(ray));
+	if (hit.distance < 10000 && hit.distance > 0)
+		return (1);
 	return (0);
 }
 
@@ -135,6 +186,7 @@ void	ft_init_ray(t_ray *ray, t_vec3 dir)
 	(*ray).hasHit = 0;
 	(*ray).from = ft_vec3(0, 0, 0);
 	(*ray).hit.distance = 0;
+	(*ray).hit.shape_addr = NULL;
 	(*ray).direction = dir;
 }
 
@@ -153,6 +205,7 @@ int	main(int argc, char **argv)
 	int	size_line;
 	int	endian;
 	int	pos[2];
+	int	pixel;
 
 	mlx_ptr = mlx_init();
 	win_ptr = mlx_new_window(mlx_ptr, 600, 600, "MiniRT");
@@ -163,9 +216,12 @@ int	main(int argc, char **argv)
 	lst_shapes = ft_lst_shapes();
 	while (j <= 600)
 	{
+		pixel = 0;
 		v = ft_vec3(((double)i/600) * 2 - 1, ((double)j/600) * 2 - 1, 1);
 		ft_init_ray(&ray, v);
-		ft_pixel_put(&data_addr, i, j, size_line, bpp, ft_has_intersection(lst_shapes, &ray));
+		if (ft_has_intersection(lst_shapes, &ray, NULL))
+			pixel = ft_light(&ray, lst_shapes);
+		ft_pixel_put(&data_addr, i, j, size_line, bpp, pixel);
 		if (i == 600)
 		{
 			i = -1;

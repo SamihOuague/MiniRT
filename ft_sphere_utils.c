@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:50:38 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/23 09:37:39 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/26 08:07:29 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	ft_sphere_normal(t_sphere sphere, t_ray *ray)
 	t_vec3	hit;
 
 	hit = ft_product((*ray).direction, (*ray).hit.distance);
+	sphere.origin = ft_sub(sphere.origin, (*ray).from);
 	normal = ft_sub(hit, sphere.origin);
 	(*ray).hit.normal = ft_normalize(normal);
 	return (1);
@@ -41,13 +42,14 @@ int		ft_sphere_intersection(void *sphere, t_ray *ray)
 		return (0);
 	t[0] = -equation.y / (2 * equation.x);
 	t[1] = t[0];
-	if (dis != 0)
+	if (dis > 0)
 		dis = sqrt(dis);
 	t[0] = (-equation.y + dis) / (2 * equation.x);
 	t[1] = (-equation.y - dis) / (2 * equation.x);
 	if (t[0] > t[1])
 		t[0] = t[1];
 	(*ray).hit.distance = t[0];
+	(*ray).hit.shape_addr = sphere;
 	return (ft_sphere_normal(s, ray));
 }
 

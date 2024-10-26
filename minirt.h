@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:05:54 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/23 09:00:26 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:34:18 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_hitpoint
 	t_vec3	normal;
 	double	distance;
 	int	pixel;
+	void	*shape_addr;
 }	t_hitpoint;
 
 typedef struct s_ray
