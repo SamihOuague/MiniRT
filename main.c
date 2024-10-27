@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:25:10 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/27 12:13:22 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/27 19:40:28 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,9 +170,30 @@ t_vec3	ft_product(t_vec3 a, double n)
 
 t_vec3	ft_sum(t_vec3 a, t_vec3 b);
 
+float	ft_qrsqrt(float nbr)
+{
+	long	i;	
+	float	y;
+	float	x;
+	float	threehalf;
+
+	threehalf = 1.5f;
+	x = nbr * 0.5f;
+	y = nbr;
+	i = *(long *) &y;
+	i = 0x5f3759df - (i >> 1);
+	y = *(float *) &i;
+	y = y * (threehalf - (x * y * y));		
+	return (fabs(y));
+}
+
 t_vec3	ft_normalize(t_vec3 v)
 {
-	return (ft_product(v, 1 / sqrt(ft_dot(v, v))));
+	float	nbr;
+
+	nbr = fabs(ft_dot(v, v));
+	//printf("%f %f\n", 1 / sqrt(nbr), ft_qrsqrt(nbr));
+	return (ft_product(v, ft_qrsqrt(nbr)));
 }
 
 int	ft_is_shadow(t_ray ray, t_vec3 light, t_list *shapes)
@@ -185,7 +206,7 @@ int	ft_is_shadow(t_ray ray, t_vec3 light, t_list *shapes)
 	shadow.direction = ft_normalize(ft_sub(light, hit));
 	shadow.from = hit;
 	light = ft_sub(light, hit);
-	light_d = sqrt(ft_dot(light, light));
+	light_d = 1 / ft_qrsqrt(ft_dot(light, light));
 	if (ft_has_intersection(shapes, &shadow, ray.hit.shape_addr)
 			&& light_d > shadow.hit.distance)
 		return (1);
@@ -199,10 +220,11 @@ int	ft_light(t_ray *ray, t_list *shapes)
 	t_vec3		lm;
 	t_vec3		n;
 	double		intensity;
+	t_vec3		specular;
 	int		pixel;
 	t_vec3		light;
 
-	light = ft_vec3(0, -2.5, 10);
+	light = ft_vec3(0, -2, 10);
 	v = ft_sum((*ray).from, ft_product((*ray).direction, (*ray).hit.distance));
 	hit = (*ray).hit;
 	lm = ft_normalize(ft_sub(ft_sub(light, (*ray).from), v));
@@ -210,7 +232,12 @@ int	ft_light(t_ray *ray, t_list *shapes)
 	intensity = ft_dot(lm, n);
 	if (intensity < 0 || ft_is_shadow(*ray, light, shapes))
 		intensity = 0;
-	intensity = (intensity * 0.9);
+	specular = ft_vec3(0, 0, 0);
+	if (intensity > 0.001f)
+		specular = ft_sub(ft_product(n, 2 * intensity), lm);
+	intensity = (intensity * 0.6) + pow(ft_dot(specular, ft_normalize((*ray).direction)), 6) * 0.4;
+	if (intensity > 1)
+		intensity = 1;
 	pixel = ft_get_rgb(255 * intensity, 255 * intensity, 255 * intensity);
 	return (pixel);
 }
@@ -275,7 +302,7 @@ int	main(int argc, char **argv)
 	int	width;
 	int	height;
 	double	aspect_ratio;
-	double	fov = 90.0;
+	double	fov = 110.0f;
 
 	i = 0;
 	j = 0;

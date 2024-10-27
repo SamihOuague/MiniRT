@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 05:07:00 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/26 14:37:15 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/27 14:08:45 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	ft_caps_intersection(t_cylinder cy, t_ray *ray)
 	double	c;
 	double	d[2];
 
-	cy.axis = ft_normalize(cy.axis);
+	//cy.axis = ft_normalize(cy.axis);
 	c_top = ft_sum(cy.origin, ft_product(cy.axis, cy.height));
 	den = ft_dot(cy.axis, (*ray).direction);
 	if (fabs(den) <= 0.0001f)
@@ -93,7 +93,7 @@ int	ft_cylinder_intersection(void *cylinder, t_ray *ray)
 
 	cy = *(t_cylinder *)cylinder;	
 	cy.origin = ft_sub(cy.origin, (*ray).from);	
-	cy.axis = ft_normalize(cy.axis);
+	//cy.axis = ft_normalize(cy.axis);
 	cross_d = ft_cross_product((*ray).direction, cy.axis);
 	equation.x = ft_dot(cross_d, cross_d);
 	equation.y = ft_dot(cross_d, ft_cross_product(cy.origin, cy.axis));
