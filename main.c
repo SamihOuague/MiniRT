@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:25:10 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/27 05:30:57 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/10/27 12:13:22 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,13 +138,13 @@ t_list	*ft_lst_shapes()
 	ft_lstadd_front(&lst_shapes, tmp);
 	
 
-	/*size[1] = 50;
-	shape = ft_create_cylinder(ft_vec3(0, 2, 10), ft_vec3(0, 1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);*/
 	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, 20), 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
+/*	size[1] = 50;
+	shape = ft_create_cylinder(ft_vec3(0, 2, 10), ft_vec3(0, 1, 0), size, 0xff00ff);
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);*/
 	shape = ft_create_plane(ft_vec3(0, 1, 0), ft_vec3(0, -3, -1), 0xff00ff);
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
@@ -202,7 +202,7 @@ int	ft_light(t_ray *ray, t_list *shapes)
 	int		pixel;
 	t_vec3		light;
 
-	light = ft_vec3(0, 0, 15);
+	light = ft_vec3(0, -2.5, 10);
 	v = ft_sum((*ray).from, ft_product((*ray).direction, (*ray).hit.distance));
 	hit = (*ray).hit;
 	lm = ft_normalize(ft_sub(ft_sub(light, (*ray).from), v));
@@ -251,6 +251,11 @@ void	ft_init_ray(t_ray *ray, t_vec3 dir)
 	(*ray).direction = dir;
 }
 
+double	ft_radian(double angle)
+{
+	return (angle * M_PI/180.0f);
+}
+
 int	main(int argc, char **argv)
 {	
 	t_list	*lst_shapes;
@@ -267,23 +272,30 @@ int	main(int argc, char **argv)
 	int	endian;
 	int	pos[2];
 	int	pixel;
+	int	width;
+	int	height;
+	double	aspect_ratio;
+	double	fov = 90.0;
 
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, 600, 600, "MiniRT");
-	img_ptr = mlx_new_image(mlx_ptr, 600, 600);
-	data_addr = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
 	i = 0;
 	j = 0;
+	width = 1600;
+	height = 800;
+	aspect_ratio = width / height;
+	mlx_ptr = mlx_init();
+	win_ptr = mlx_new_window(mlx_ptr, width, height, "MiniRT");
+	img_ptr = mlx_new_image(mlx_ptr, width, height);
+	data_addr = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
 	lst_shapes = ft_lst_shapes();
-	while (j <= 600)
+	while (j <= height)
 	{
 		pixel = 0;
-		v = ft_vec3((((double)i - 0.5)/600) * 2 - 1, (((double)j - 0.5)/600) * 2 - 1, 1);
+		v = ft_vec3(aspect_ratio * ((((double)i - 0.5)/width) * 2 - 1) * tan(ft_radian(fov / 2)), (((double)j - 0.5)/height * 2 - 1) * tan(ft_radian(fov / 2)), 1);
 		ft_init_ray(&ray, v);
 		if (ft_has_intersection(lst_shapes, &ray, NULL))
 			pixel = ft_light(&ray, lst_shapes);
 		ft_pixel_put(&data_addr, i, j, size_line, bpp, pixel);
-		if (i == 600)
+		if (i == width)
 		{
 			i = -1;
 			j++;
