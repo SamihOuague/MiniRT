@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 05:07:00 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/27 14:08:45 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/11/03 20:23:10 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_cy_normal(t_cylinder cy, t_ray *ray)
 	hit = ft_product((*ray).direction, (*ray).hit.distance);
 	t = ft_dot(cy.axis, ft_sub(hit, cy.origin));
 	normal = ft_sub(ft_sub(hit, ft_product(cy.axis, t)), cy.origin);
-	normal = ft_product(normal, 1.0f / sqrt(ft_dot(normal, normal)));
+	normal = ft_product(normal, 1.0f / ft_qrsqrt(ft_dot(normal, normal)));
 	(*ray).hit.normal = normal;
 	return (1);
 }

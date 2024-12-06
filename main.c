@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 04:25:10 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/27 19:40:28 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/11/07 22:57:12 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,124 +39,148 @@ t_vec3	ft_vec3(double x, double y, double z)
 t_list	*ft_lst_shapes()
 {
 	t_list	*lst_shapes;
-	t_list	*tmp;	
+	t_list	*tmp;
 	t_shape	*shape;	
 	double	size[2];
 	
-	size[0] = 6;
-	size[1] = 1;
+	size[0] = 21.2;
+	size[1] = 7.1;
 	lst_shapes = NULL;
-	
-	shape = ft_create_sphere(ft_vec3(-5, -4, 25), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
 
-	shape = ft_create_sphere(ft_vec3(5, -4, 25), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_sphere(ft_vec3(-5, -4, 15), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, -4, 15), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(-5, -4, 10), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, -4, 10), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(-5, 4, 25), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, 4, 25), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_sphere(ft_vec3(-5, 4, 15), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, 4, 15), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(-5, 4, 10), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, 4, 10), 2, 0xff00ff);
+	shape = ft_create_sphere(ft_vec3(40, -20, 40), 10, ft_vec3(255, 0, 0));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
 	
-	shape = ft_create_sphere(ft_vec3(-5, 4, 0), 2, 0xff00ff);
+	//cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255
+
+	shape = ft_create_cylinder(ft_vec3(-20, -3.55, 41.6), ft_normalize(ft_vec3(-1, 0, 0)), size, ft_vec3(10, 0, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, 4, 0), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(-5, -4, 0), 2, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-
-	shape = ft_create_sphere(ft_vec3(5, -4, 0), 2, 0xff00ff);
+	/*shape = ft_create_sphere(ft_vec3(5, -4, 25), 2, ft_vec3(0, 0, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);	
-	shape = ft_create_cylinder(ft_vec3(5, 3, 25), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_cylinder(ft_vec3(-5, 3, 25), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	
-	shape = ft_create_cylinder(ft_vec3(5, 3, 15), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_cylinder(ft_vec3(-5, 3, 15), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	
-	
-	shape = ft_create_cylinder(ft_vec3(5, 3, 10), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_cylinder(ft_vec3(-5, 3, 10), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	
-	shape = ft_create_cylinder(ft_vec3(5, 3, 0), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_cylinder(ft_vec3(-5, 3, 0), ft_vec3(0, -1, 0), size, 0xff00ff);
-	tmp = ft_lstnew(shape);
-	ft_lstadd_front(&lst_shapes, tmp);
-	
 
-	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, 20), 0xff00ff);
+	shape = ft_create_sphere(ft_vec3(-5, 4, 25), 2, ft_vec3(0, 0, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, 4, 25), 2, ft_vec3(0, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(-5, 4, 15), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, 4, 15), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(-5, -4, 15), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, -4, 15), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(-5, -4, 5), 2, ft_vec3(255, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, -4, 5), 2, ft_vec3(255, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_sphere(ft_vec3(-5, 4, 5), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, 4, 5), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_sphere(ft_vec3(-5, 4, 0), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, 4, 0), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(-5, -4, 0), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_sphere(ft_vec3(5, -4, 0), 2, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_cylinder(ft_vec3(5, 3, 25), ft_vec3(0, -1, 0), size, ft_vec3(0, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_cylinder(ft_vec3(-5, 3, 25), ft_vec3(0, -1, 0), size, ft_vec3(0, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_cylinder(ft_vec3(5, 3, 15), ft_vec3(0, -1, 0), size, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_cylinder(ft_vec3(-5, 3, 15), ft_vec3(0, -1, 0), size, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_cylinder(ft_vec3(5, 3, 5), ft_vec3(0, -1, 0), size, ft_vec3(0, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_cylinder(ft_vec3(-5, 3, 5), ft_vec3(0, -1, 0), size, ft_vec3(0, 0, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+	
+	shape = ft_create_cylinder(ft_vec3(5, 3, 0), ft_vec3(0, -1, 0), size, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_cylinder(ft_vec3(-5, 3, 0), ft_vec3(0, -1, 0), size, ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, 20), ft_vec3(255, 255, 255));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+*/
 /*	size[1] = 50;
-	shape = ft_create_cylinder(ft_vec3(0, 2, 10), ft_vec3(0, 1, 0), size, 0xff00ff);
+	shape = ft_create_cylinder(ft_vec3(0, 2, 10), ft_vec3(0, 1, 0), size, ft_vec3(255, 255, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);*/
-	shape = ft_create_plane(ft_vec3(0, 1, 0), ft_vec3(0, -3, -1), 0xff00ff);
+
+/*	shape = ft_create_plane(ft_vec3(0, 1, 0), ft_vec3(0, -3, -1), ft_vec3(0, 0, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_plane(ft_vec3(1, 0, 0), ft_vec3(-10, 0, -1), 0xff00ff);
+*/
+/*	shape = ft_create_cylinder(ft_vec3(-5, 3, 10), ft_normalize(ft_vec3(1, -1, -1)), size, ft_vec3(255, 255, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_plane(ft_vec3(-1, 0, 0), ft_vec3(10, 0, -1), 0xff00ff);
+	*/
+
+	shape = ft_create_plane(ft_vec3(0, -1, 0), ft_vec3(0, 3, 0), ft_vec3(255, 255, 255));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
-	shape = ft_create_plane(ft_vec3(0, 0, -1), ft_vec3(0, 1, 30), 0xff00ff);
+/*	shape = ft_create_plane(ft_vec3(1, 0, 0), ft_vec3(-10, 0, -1), ft_vec3(255, 255, 0));
 	tmp = ft_lstnew(shape);
 	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_plane(ft_vec3(-1, 0, 0), ft_vec3(10, 0, -1), ft_vec3(255, 255, 0));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+
+	shape = ft_create_plane(ft_vec3(0, 0, -1), ft_vec3(0, 1, 30), ft_vec3(255, 0, 0));
+	tmp = ft_lstnew(shape);
+	ft_lstadd_front(&lst_shapes, tmp);
+*/
 	return (lst_shapes);
 }
 
@@ -220,11 +244,14 @@ int	ft_light(t_ray *ray, t_list *shapes)
 	t_vec3		lm;
 	t_vec3		n;
 	double		intensity;
+	double		intensity2;
 	t_vec3		specular;
 	int		pixel;
 	t_vec3		light;
+	t_vec3		color;
+	t_shape		shape;
 
-	light = ft_vec3(0, -2, 10);
+	light = ft_vec3(0, 2, 0);
 	v = ft_sum((*ray).from, ft_product((*ray).direction, (*ray).hit.distance));
 	hit = (*ray).hit;
 	lm = ft_normalize(ft_sub(ft_sub(light, (*ray).from), v));
@@ -235,10 +262,23 @@ int	ft_light(t_ray *ray, t_list *shapes)
 	specular = ft_vec3(0, 0, 0);
 	if (intensity > 0.001f)
 		specular = ft_sub(ft_product(n, 2 * intensity), lm);
-	intensity = (intensity * 0.6) + pow(ft_dot(specular, ft_normalize((*ray).direction)), 6) * 0.4;
+	intensity = (intensity * 1) + pow(ft_dot(specular, ft_normalize((*ray).direction)), 10) * 0 + 0;
 	if (intensity > 1)
-		intensity = 1;
-	pixel = ft_get_rgb(255 * intensity, 255 * intensity, 255 * intensity);
+		intensity = 1;	
+/*	light = ft_vec3(0, 2, 0);
+	lm = ft_normalize(ft_sub(ft_sub(light, (*ray).from), v));
+	n = hit.normal;
+	intensity2 = ft_dot(lm, n);	
+	specular = ft_vec3(0, 0, 0);
+	if (intensity2 > 0.001f)
+		specular = ft_sub(ft_product(n, 2 * intensity2), lm);
+	if (intensity2 < 0 || ft_is_shadow(*ray, light, shapes))
+		intensity2 = 0;	
+	intensity2 = (intensity2 * 0.7) + pow(ft_dot(specular, ft_normalize((*ray).direction)), 10) * 0.3;
+	intensity = (intensity + intensity2) / 2;
+	*/
+	color = ft_product((*ray).hit.pixel, intensity);
+	pixel = ft_get_rgb(color.x, color.y, color.z);
 	return (pixel);
 }
 
@@ -259,7 +299,10 @@ int	ft_has_intersection(t_list *shapes, t_ray *ray, void *exclude)
 			&& (*ray).hit.distance > 0)
 		{
 			if ( (*ray).hit.distance < hit.distance)
+			{
 				hit = (*ray).hit;
+				hit.pixel = (*content).color;
+			}	
 		}
 		cursor = (*cursor).next;
 	}
@@ -272,7 +315,8 @@ int	ft_has_intersection(t_list *shapes, t_ray *ray, void *exclude)
 void	ft_init_ray(t_ray *ray, t_vec3 dir)
 {
 	(*ray).hasHit = 0;
-	(*ray).from = ft_vec3(0, 0, 0);
+	(*ray).from = ft_vec3(0, 0, 0);	
+	(*ray).hit.pixel = ft_vec3(0, 0, 0);
 	(*ray).hit.distance = 0;
 	(*ray).hit.shape_addr = NULL;
 	(*ray).direction = dir;
@@ -281,6 +325,29 @@ void	ft_init_ray(t_ray *ray, t_vec3 dir)
 double	ft_radian(double angle)
 {
 	return (angle * M_PI/180.0f);
+}
+
+void    ft_lookAt(t_vec3 matrix[3], t_vec3 forward)
+{
+        t_vec3  randup;
+        t_vec3  right;
+        t_vec3  up;
+        t_vec3  transform;
+        t_vec3  position;
+
+	forward = ft_normalize(forward);
+        randup = ft_vec3(0, 1, 0);
+        right = ft_normalize(ft_cross_product(randup, forward));
+        up = ft_normalize(ft_cross_product(forward, right));
+
+        //position = ft_vec3(1, 1, 1);
+
+        //transform = ft_vec3(ft_dot(position, right), ft_dot(position, up), ft_dot(position, forward));
+	
+        matrix[0] = right;
+        matrix[1] = up;
+	matrix[2] = forward;
+	
 }
 
 int	main(int argc, char **argv)
@@ -302,22 +369,28 @@ int	main(int argc, char **argv)
 	int	width;
 	int	height;
 	double	aspect_ratio;
-	double	fov = 110.0f;
+	double	fov = 70.0f;
+	t_vec3	matrix[3];
 
 	i = 0;
 	j = 0;
-	width = 1600;
-	height = 800;
+	width = 1200;
+	height = 600;
 	aspect_ratio = width / height;
 	mlx_ptr = mlx_init();
 	win_ptr = mlx_new_window(mlx_ptr, width, height, "MiniRT");
 	img_ptr = mlx_new_image(mlx_ptr, width, height);
 	data_addr = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
 	lst_shapes = ft_lst_shapes();
+	ft_lookAt(matrix, ft_vec3(0, 0, 1));
 	while (j <= height)
 	{
 		pixel = 0;
 		v = ft_vec3(aspect_ratio * ((((double)i - 0.5)/width) * 2 - 1) * tan(ft_radian(fov / 2)), (((double)j - 0.5)/height * 2 - 1) * tan(ft_radian(fov / 2)), 1);
+		
+		//printf("%f\n", ft_dot(v, matrix[2]));
+		v = ft_vec3(ft_dot(v, matrix[0]), ft_dot(v, matrix[1]), ft_dot(v, matrix[2]));
+		v = ft_normalize(v);
 		ft_init_ray(&ray, v);
 		if (ft_has_intersection(lst_shapes, &ray, NULL))
 			pixel = ft_light(&ray, lst_shapes);

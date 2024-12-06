@@ -6,7 +6,7 @@
 /*   By: souaguen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 04:51:39 by souaguen          #+#    #+#             */
-/*   Updated: 2024/10/14 05:16:19 by souaguen         ###   ########.fr       */
+/*   Updated: 2024/11/03 20:17:02 by souaguen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ void	ft_shapes_alloc(void **object, t_shape **shape, unsigned int obj_size)
 	}
 }
 
-void	ft_shape_init(t_shape **shape, void *obj, int color, void (f)(t_shape **))
+void	ft_shape_init(t_shape **shape, void *obj, t_vec3 color, void (f)(t_shape **))
 {
 	(**shape).object = obj;
 	(**shape).color = color;
 	f(shape);
 }
 
-t_shape	*ft_create_sphere(t_vec3 origin, double radius, int color)
+t_shape	*ft_create_sphere(t_vec3 origin, double radius, t_vec3 color)
 {
 	t_sphere	*sphere;
 	t_shape		*shape;
@@ -43,7 +43,7 @@ t_shape	*ft_create_sphere(t_vec3 origin, double radius, int color)
 	return (shape);
 }
 
-t_shape	*ft_create_cylinder(t_vec3 base, t_vec3 axis, double size[2], int color)
+t_shape	*ft_create_cylinder(t_vec3 base, t_vec3 axis, double size[2], t_vec3 color)
 {
 	t_cylinder	*cylinder;
 	t_shape		*shape;
@@ -56,7 +56,7 @@ t_shape	*ft_create_cylinder(t_vec3 base, t_vec3 axis, double size[2], int color)
 	return (shape);
 }
 
-t_shape	*ft_create_plane(t_vec3 axis, t_vec3 point, int color)
+t_shape	*ft_create_plane(t_vec3 axis, t_vec3 point, t_vec3 color)
 {
 	t_plane		*plane;
 	t_shape		*shape;
